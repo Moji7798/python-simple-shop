@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6">
+    {% if product.image %}
+    <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
+    {% endif %}
+  </div>
+  <div class="col-md-6">
+    <h2>{{ product.name }}</h2>
+    <p>{{ product.description }}</p>
+    <h4>{{ product.price }}</h4>
+    <p>Stock: {{ product.stock }}</p>
+    <p>
+      Categories:
+      {% for cat in product.categories.all %}
+      {{ cat.name }}{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+    <a href="{% url 'products:product_list' %}" class="btn btn-secondary">Back</a>
+  </div>
+</div>
+{% endblock %}

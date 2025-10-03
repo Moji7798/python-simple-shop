@@ -1,6 +1,10 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.views.generic import DetailView, ListView
+from django.urls import reverse_lazy
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 
+from .mixins import AdminRequiredMixin
 from .models import Category, Product
 
 
@@ -32,3 +36,30 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = "products/product_detail.html"
     context_object_name = "product"
+
+
+class ProductAdminListView(LoginRequiredMixin, AdminRequiredMixin, ListView):
+    template_name = "products/admin_list.html"
+    model = Product
+    context_object_name = "products"
+    paginate_by = 20
+
+
+class ProductCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
+    model = Product
+    fields = ["name", "description", "price", "image", "stock", "categories"]
+    template_name = "products/product_form.html"
+    success_url = reverse_lazy("products:admin_index")
+
+
+class ProductUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
+    model = Product
+    fields = ["name", "description", "price", "image", "stock", "categories"]
+    template_name = "products/product_form.html"
+    success_url = reverse_lazy("products:admin_index")
+
+
+class ProductDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
+    model = Product
+    template_name = "products/product_confirm_delete.html"
+    success_url = reverse_lazy("products:admin_index")
