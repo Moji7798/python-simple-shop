@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}مدیریت · محصولات{% endblock %}
+{% block content %}
+<div class="flex items-center justify-between">
+  <h1 class="text-2xl font-bold text-gray-900">محصولات (مدیریت)</h1>
+  <a href="{% url 'products:product_create' %}" class="inline-flex items-center rounded-xl bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">افزودن محصول</a>
+</div>
+
+<div class="mt-6 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">نام</th>
+        <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">قیمت</th>
+        <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">موجودی</th>
+        <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">عملیات</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      {% for product in products %}
+      <tr>
+        <td class="px-4 py-3 text-sm text-gray-800">{{ product.name }}</td>
+        <td class="px-4 py-3 text-sm text-gray-700">{{ product.price }}</td>
+        <td class="px-4 py-3 text-sm text-gray-700">{{ product.stock }}</td>
+        <td class="px-4 py-3 text-right text-sm">
+          <a href="{% url 'products:product_edit' product.pk %}" class="mr-2 rounded-lg border border-gray-300 px-3 py-1.5 text-gray-700 hover:bg-gray-50">ویرایش</a>
+          <a href="{% url 'products:product_delete' product.pk %}" class="rounded-lg bg-red-600 px-3 py-1.5 text-white hover:bg-red-700">حذف</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" class="px-4 py-8 text-center text-gray-500">هنوز محصولی وجود ندارد.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if is_paginated %}
+<nav class="mt-6 flex items-center justify-between">
+  <div>
+    {% if page_obj.has_previous %}
+    <a class="inline-flex items-center rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+       href="?page={{ page_obj.previous_page_number }}">قبلی</a>
+    {% endif %}
+  </div>
+  <div class="text-sm text-gray-600">صفحه {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</div>
+  <div>
+    {% if page_obj.has_next %}
+    <a class="inline-flex items-center rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+       href="?page={{ page_obj.next_page_number }}">بعدی</a>
+    {% endif %}
+  </div>
+</nav>
+{% endif %}
+{% endblock %}
+

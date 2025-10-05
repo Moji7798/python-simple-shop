@@ -1,64 +1,158 @@
 <!DOCTYPE html>
-<html>
+<html lang="fa" dir="rtl">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{% block title %}My Shop{% endblock %}</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#eef2ff",
+                100: "#e0e7ff",
+                200: "#c7d2fe",
+                300: "#a5b4fc",
+                400: "#818cf8",
+                500: "#6366f1",
+                600: "#4f46e5",
+                700: "#4338ca",
+                800: "#3730a3",
+                900: "#312e81",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      /* Global form field styling for better visibility */
+      form input[type="text"],
+      form input[type="email"],
+      form input[type="password"],
+      form input[type="number"],
+      form input[type="tel"],
+      form input[type="url"],
+      form input[type="search"],
+      form select,
+      form textarea {
+        width: 100%;
+        border: 1px solid #d1d5db; /* gray-300 */
+        background-color: #ffffff;
+        border-radius: 0.75rem; /* rounded-xl */
+        padding: 0.5rem 0.75rem; /* py-2 px-3 */
+        color: #111827; /* gray-900 */
+        outline: none;
+        transition: box-shadow .2s, border-color .2s;
+        text-align: right; /* RTL friendly */
+      }
+      form textarea {
+        min-height: 7rem;
+        resize: vertical;
+      }
+      form input:focus,
+      form select:focus,
+      form textarea:focus {
+        border-color: #6366f1; /* primary-500 */
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.35);
+      }
+      /* Spacing for Django's default as_p rendering */
+      form p { margin-bottom: 0.75rem; }
+      form label { display: inline-block; margin-bottom: 0.25rem; color: #374151; font-size: 0.9rem; }
+      form ul.errorlist { color: #b91c1c; margin: 0.25rem 0 0.5rem; }
+    </style>
   </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container">
-        <a class="navbar-brand" href="{% url 'products:product_list' %}"
-          >My Shop</a
-        >
-        <form
-          class="d-flex"
-          method="get"
-          action="{% url 'products:product_list' %}"
-        >
-          <input
-            name="q"
-            class="form-control me-2"
-            placeholder="Search"
-            value="{{ q }}"
-          />
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-
-        <!-- inside navbar container -->
-        <ul class="navbar-nav ms-auto">
-          {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="#">{{ user.username }}</a>
-          </li>
-          {% if user.is_staff %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'products:admin_index' %}"
-              >Admin panel</a
+  <body class="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
+    <header
+      class="sticky top-0 z-40 border-b border-gray-200 bg-white/80 backdrop-blur"
+    >
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 items-center justify-between gap-4">
+          <a
+            href="{% url 'products:product_list' %}"
+            class="flex items-center gap-2 text-lg font-semibold text-primary-700 hover:text-primary-600"
+          >
+            <span
+              class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600 text-white"
+              >🛍️</span
             >
-          </li>
-          {% endif %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
-          </li>
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts:signup' %}">Sign up</a>
-          </li>
-          {% endif %}
-        </ul>
+            <span>فروشگاه من</span>
+          </a>
+          <form
+            method="get"
+            action="{% url 'products:product_list' %}"
+            class="flex flex-1 max-w-xl items-center gap-2"
+          >
+            <div class="relative flex-1">
+              <input
+                name="q"
+                value="{{ q }}"
+                placeholder="جستجوی محصولات..."
+                class="w-full rounded-xl border border-gray-300 bg-white/80 px-4 py-2 pl-10 text-sm shadow-sm outline-none ring-primary-500 placeholder:text-gray-400 focus:border-primary-500 focus:ring-2"
+              />
+              <span
+                class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-gray-400"
+                >🔎</span
+              >
+            </div>
+            <button
+              type="submit"
+              class="hidden sm:inline-flex items-center rounded-xl bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              جستجو
+            </button>
+          </form>
+          <nav class="flex items-center gap-2">
+            <a href="{% url 'cart:cart_detail' %}" class="rounded-xl px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-700 flex items-center gap-1">
+              <span>🛒</span>
+              <span>سبد خرید</span>
+            </a>
+            {% if user.is_authenticated %}
+            <span
+              class="hidden sm:inline-flex rounded-xl bg-gray-100 px-3 py-1 text-sm text-gray-700"
+              >{{ user.username }}</span
+            >
+            {% if user.is_staff %}
+            <a
+              href="{% url 'products:admin_index' %}"
+              class="rounded-xl px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-700"
+              >پنل مدیریت</a
+            >
+            {% endif %}
+            <a
+              href="{% url 'accounts:logout' %}"
+              class="rounded-xl bg-gray-800 px-3 py-2 text-sm font-medium text-white hover:bg-gray-900"
+              >خروج</a
+            >
+            {% else %}
+            <a
+              href="{% url 'accounts:login' %}"
+              class="rounded-xl px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-700"
+              >ورود</a
+            >
+            <a
+              href="{% url 'accounts:signup' %}"
+              class="rounded-xl bg-primary-600 px-3 py-2 text-sm font-medium text-white hover:bg-primary-700"
+              >ثبت نام</a
+            >
+            {% endif %}
+          </nav>
+        </div>
       </div>
-    </nav>
+    </header>
 
-    <div class="container mt-4">{% block content %}{% endblock %}</div>
+    <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 grow">
+      {% block content %}{% endblock %}
+    </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <footer class="border-t border-gray-200 bg-white/60">
+      <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <p class="text-center text-sm text-gray-500">
+          &copy; {% now 'Y' %} تمامی حقوق برای فروشگاه من محفوظ است.
+        </p>
+      </div>
+    </footer>
   </body>
 </html>

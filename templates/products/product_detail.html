@@ -1,26 +1,52 @@
 {% extends 'base.html' %}
-
-{% block title %}{{ product.name }}{% endblock %}
-
+{% block title %}{{ product.name }}{% endblock %} 
 {% block content %}
-<div class="row">
-  <div class="col-md-6">
-    {% if product.image %}
-    <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
-    {% endif %}
+<div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+  <div>
+    <div
+      class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
+    >
+      {% if product.image %}
+      <img
+        src="{{ product.image.url }}"
+        alt="{{ product.name }}"
+        class="h-96 w-full object-cover"
+      />
+      {% endif %}
+    </div>
   </div>
-  <div class="col-md-6">
-    <h2>{{ product.name }}</h2>
-    <p>{{ product.description }}</p>
-    <h4>{{ product.price }}</h4>
-    <p>Stock: {{ product.stock }}</p>
-    <p>
-      Categories:
+  <div class="flex flex-col gap-4">
+    <h1 class="text-2xl font-bold text-gray-900">{{ product.name }}</h1>
+    <p class="text-gray-700">{{ product.description }}</p>
+    <div class="flex items-center gap-4">
+      <span class="text-3xl font-extrabold text-primary-700"
+        >{{ product.price }}</span
+      >
+      <span
+        class="rounded-full border border-gray-300 px-3 py-1 text-sm text-gray-600"
+        >موجودی: {{ product.stock }}</span
+      >
+    </div>
+    <div class="text-sm text-gray-600">
+      <span class="font-semibold text-gray-700">دسته‌بندی‌ها:</span>
       {% for cat in product.categories.all %}
-      {{ cat.name }}{% if not forloop.last %}, {% endif %}
+      <span class="mr-1"
+        >{{ cat.name }}{% if not forloop.last %}, {% endif %}</span
+      >
       {% endfor %}
-    </p>
-    <a href="{% url 'products:product_list' %}" class="btn btn-secondary">Back</a>
+    </div>
+    <div class="mt-4 flex gap-3">
+      <a
+        href="{% url 'products:product_list' %}"
+        class="inline-flex items-center rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+        >بازگشت</a
+      >
+      <a
+        href="{% url 'cart:add_to_cart' product.id %}"
+        class="inline-flex items-center rounded-xl bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
+        >افزودن به سبد</a
+      >
+    </div>
   </div>
 </div>
 {% endblock %}

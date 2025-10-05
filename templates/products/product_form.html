@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}{% if view.object %}ویرایش{% else %}ایجاد{% endif %} محصول{% endblock %}
+{% block content %}
+<div class="mx-auto max-w-2xl">
+  <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+    <h1 class="mb-4 text-2xl font-bold text-gray-900">{% if view.object %}ویرایش{% else %}ایجاد{% endif %} محصول</h1>
+    <form method="post" enctype="multipart/form-data" class="space-y-4">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="flex items-center gap-3">
+        <a href="{% url 'products:admin_index' %}" class="inline-flex items-center rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">انصراف</a>
+        <button type="submit" class="inline-flex items-center rounded-xl bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">ذخیره</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
