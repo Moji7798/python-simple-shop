@@ -121,11 +121,10 @@
               >پنل مدیریت</a
             >
             {% endif %}
-            <a
-              href="{% url 'accounts:logout' %}"
-              class="rounded-xl bg-gray-800 px-3 py-2 text-sm font-medium text-white hover:bg-gray-900"
-              >خروج</a
-            >
+            <form method="post" action="{% url 'accounts:logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="rounded-xl bg-gray-800 px-3 py-2 text-sm font-medium text-white hover:bg-gray-900">خروج</button>
+            </form>
             {% else %}
             <a
               href="{% url 'accounts:login' %}"
