@@ -8,7 +8,7 @@ from .mixins import AdminRequiredMixin
 from .models import Category, Product
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     context_object_name = "products"
     paginate_by = 12
@@ -32,7 +32,7 @@ class ProductListView(ListView):
         return ctx
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = "products/product_detail.html"
     context_object_name = "product"
