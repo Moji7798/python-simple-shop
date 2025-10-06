@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}خروج{% endblock %}
+{% block content %}
+<div class="mx-auto max-w-md">
+  <div class="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm">
+    <h1 class="mb-2 text-2xl font-bold text-gray-900">از حساب کاربری خارج شدید</h1>
+    <p class="mb-4 text-gray-600">برای ادامه می‌توانید وارد حساب خود شوید.</p>
+    <a href="{% url 'accounts:login' %}" class="inline-flex items-center rounded-xl bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">ورود</a>
+  </div>
+</div>
+{% endblock %}
+
